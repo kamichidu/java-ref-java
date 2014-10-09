@@ -22,6 +22,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.FileOptionHandler;
 
@@ -143,12 +145,17 @@ public class Generator
     public static void main(String[] args)
     {
         final Generator.CommandOption option= new Generator.CommandOption();
+        final CmdLineParser parser= new CmdLineParser(option);
 
-        option.setWorkDir(new File(getenv("TEMP")));
-        option.setDataDir(new File(getenv("TEMP")));
-        option.setJarpath(new File(getenv("JAVA_HOME"), "src.zip"));
-        option.setDocletpath(new File("C:\\Users\\USER1\\sources\\java\\json-doclet\\target\\json-doclet-0.0.0-jar-with-dependencies.jar"));
-        option.setDoclet("jp.michikusa.chitose.doclet.JsonDoclet");
+        try
+        {
+            parser.parseArgument(args);
+        }
+        catch(CmdLineException e)
+        {
+            e.printStackTrace();
+            return;
+        }
 
         final ExecutorService service= Executors.newCachedThreadPool();
         service.execute(new Generator(option){
