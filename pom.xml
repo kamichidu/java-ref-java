@@ -1,12 +1,8 @@
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-    >
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.michikusa.chitose</groupId>
     <artifactId>ref-java</artifactId>
-    <version>0.0.0-SNAPSHOT</version>
+    <version>0.0.0</version>
     <name>ref-java</name>
     <url>https://github.com/kamichidu/java-ref-java</url>
     <licenses>
@@ -25,7 +21,8 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/kamichidu/java-ref-java/</developerConnection>
-    </scm>
+      <tag>ref-java-0.0.0</tag>
+  </scm>
 
     <build>
         <plugins>
