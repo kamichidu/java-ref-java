@@ -63,12 +63,22 @@ public class Generator
     @Override
     public void run()
     {
-        final Iterable<CharSequence> pkgs= this.listPackages();
+        try
+        {
+            final Future<?> unpackTask= this.unpack();
+            final Iterable<CharSequence> filenames= this.listFiles();
 
-        this.generate(pkgs);
+            unpackTask.get();
+
+            this.generate(filenames);
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void generate(Iterable<? extends CharSequence> pkgs)
+    private void generate(Iterable<? extends CharSequence> filenames)
     {
         try
         {
@@ -77,14 +87,13 @@ public class Generator
                     "-docletpath", this.option.getDocletpath().getAbsolutePath(),
                     "-doclet", this.option.getDoclet(),
                     "-ofile", new File(this.option.getDataDir(), "output").getAbsolutePath(),
-                    "-J-Xmx512m",
-                    "-sourcepath", this.option.getJarpath().getAbsolutePath(),
-                    "@ref_java_packages"
+                    "-J-Xmx1024m",
+                    "@ref_java_files"
                 )
                 .directory(this.option.getWorkDir())
             ;
 
-            Files.write(Joiner.on('\n').join(pkgs), new File(this.option.getWorkDir(), "ref_java_packages"), Charset.forName("UTF-8"));
+            Files.write(Joiner.on('\n').join(filenames), new File(this.option.getWorkDir(), "ref_java_files"), Charset.forName("UTF-8"));
 
             final Process process= builder.start();
 
@@ -142,6 +151,27 @@ public class Generator
         }
     }
 
+    private Future<?> unpack()
+    {
+        try
+        {
+            final ProcessBuilder builder= new ProcessBuilder(
+                    new File(getenv("JAVA_HOME"), "bin/jar").getAbsolutePath(),
+                    "-xf", this.option.getJarpath().getAbsolutePath()
+                )
+                .directory(this.option.getWorkDir())
+                .redirectErrorStream(true)
+            ;
+            final Process process= builder.start();
+
+            return Inputs.readAll(process.getInputStream());
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args)
     {
         final Generator.CommandOption option= new Generator.CommandOption();
@@ -162,10 +192,11 @@ public class Generator
             @Override
             public void run()
             {
-                super.run();
-                service.shutdown();
                 try
                 {
+                    super.run();
+                    service.shutdown();
+
                     if(!service.awaitTermination(100, TimeUnit.MILLISECONDS))
                     {
                         service.shutdownNow();
