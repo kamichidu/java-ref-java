@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>jp.michikusa.chitose</groupId>
     <artifactId>ref-java</artifactId>
-    <version>0.0.0</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>ref-java</name>
     <url>https://github.com/kamichidu/java-ref-java</url>
     <licenses>
@@ -21,7 +21,7 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/kamichidu/java-ref-java/</developerConnection>
-      <tag>ref-java-0.0.0</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <build>
