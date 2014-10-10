@@ -21,8 +21,8 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/kamichidu/java-ref-java/</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <build>
         <plugins>
